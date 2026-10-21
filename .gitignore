@@ -1,0 +1,11 @@
+# Figures and cached data are regenerated, not tracked.
+out/
+data/*.rds
+data/*.csv
+
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+__pycache__/
+.DS_Store
