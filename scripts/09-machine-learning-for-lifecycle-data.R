@@ -413,13 +413,15 @@ as_pred <- function(df) {
 cal_pred <- as_pred(cal_part)
 test_pred <- as_pred(test)
 
-isotonic <- cal_estimate_isotonic(cal_pred, truth = outcome,
-                                  estimate = starts_with(".pred_"))
-platt <- cal_estimate_logistic(cal_pred, truth = outcome,
-                               estimate = starts_with(".pred_"), smooth = FALSE)
+# calibrate_probability() fits the map on the calibration slice and applies it
+# to the evaluation period, which is the separation this section insists on.
+isotonic <- calibrate_probability(cal_pred$.pred_breach,
+                                  cal_part$breach, method = "isotonic")
+platt    <- calibrate_probability(cal_pred$.pred_breach,
+                                  cal_part$breach, method = "platt")
 
-repaired_iso <- cal_apply(test_pred, isotonic)$.pred_breach
-repaired_platt <- cal_apply(test_pred, platt)$.pred_breach
+repaired_iso   <- predict(isotonic, test_pred$.pred_breach)
+repaired_platt <- predict(platt, test_pred$.pred_breach)
 
 data.frame(
   scaling = c("weighted 8:1, raw", "isotonic repair", "Platt repair"),

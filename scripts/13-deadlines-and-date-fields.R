@@ -94,6 +94,21 @@ c(promised_orders = sum(has_promise),
   past_the_promise = sum(orders$lead_hours > promise_hours, na.rm = TRUE),
   past_the_horizon = sum(orders$lead_hours > horizon_hours, na.rm = TRUE))
 
+## ---- derived-live ------------------------------------------------
+open <- !orders$is_terminal
+live <- deadline_derive(
+  commitment = as.POSIXct(orders$promised_date[open]),
+  handling_hours = pick_p90,
+  cutoff_hours = carrier_cutoff,
+  as_of = sim$as_of,
+  entered_at = orders$entered_at[open])
+
+c(open_orders = nrow(live),
+  with_a_commitment = sum(live$defined),
+  past_the_horizon = sum(live$past_horizon),
+  past_the_commitment = sum(live$past_commitment),
+  never_achievable = sum(live$infeasible))
+
 ## ---- hard-soft ---------------------------------------------------
 hard <- has_promise & orders$lead_hours > promise_hours
 soft <- orders$lead_hours > 24

@@ -1,11 +1,12 @@
 # dwellr-examples
 
-Runnable scripts for every chapter of *Lifecycle Monitoring Analytics: A
-toolkit for continuous supply chain operations*, plus the synthetic order
-corpus the book measures.
+Worked examples of [`dwellr`](https://github.com/ambientpointcorp/dwellr), one
+script per chapter of *Lifecycle Monitoring Analytics: A toolkit for continuous
+supply chain operations*, which is the book that works through the package's
+methods.
 
-The companion package is [`dwellr`](https://github.com/ambientpointcorp/dwellr).
-Install it first; everything here depends on it and nothing here duplicates it.
+Install the package first. Everything here calls it and nothing here duplicates
+it.
 
 ```r
 # install.packages("remotes")
