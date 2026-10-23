@@ -12,12 +12,15 @@ extract:
 	python3 tools/extract.py $(BOOK)
 
 list:
-	@ls scripts/*.R | sed 's|scripts/||;s|\.R$$||'
+	@ls scripts/*.R recorded/*.R | sed 's|\.R$$||'
 
 # Run every script, reporting the ones that fail. Some are slow: Chapter 20's
 # echelon searches and Chapter 9's model fits dominate the total.
+#
+# recorded/ is included because it is held to the same standard as the
+# generated scripts: it is an example only while it runs.
 run:
-	@fail=0; for s in scripts/*.R; do \
+	@fail=0; for s in scripts/*.R recorded/*.R; do \
 	  printf '%-56s' "$$s"; \
 	  if $(RSCRIPT) $$s >/dev/null 2>&1; then echo OK; \
 	  else echo FAIL; fail=1; fi; \

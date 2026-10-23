@@ -17,6 +17,7 @@ remotes::install_github("ambientpointcorp/dwellr")
 
 ```
 scripts/   one file per chapter and per appendix, generated from the manuscript
+recorded/  worked examples on data the package did not generate, hand-written
 R/         the plot theme and figure helper every script shares
 tools/     the extractor that generates scripts/ from the book
 out/       figures, regenerated rather than tracked
@@ -38,6 +39,35 @@ sources another, so a reader interested in one chapter runs one file.
 `make list` names the scripts. `make run` runs all of them and reports which
 fail, which takes roughly half an hour: Chapter 9's model fits and Chapter 20's
 echelon searches dominate the total.
+
+## Measuring a lifecycle the book did not generate
+
+Every script in `scripts/` starts from `simulate_lifecycles()`, so every one of
+them measures a corpus whose stages are the book's own: `received`, `released`,
+`shipped`. An operation being measured for real has its own stage names and its
+own idea of which of them are endings, and the package reads both out of a
+`stage_spec()` rather than assuming them.
+
+`recorded/` shows that path end to end on a freight lifecycle that shares no
+stage name with the book's: declaring the stage set, building a population from
+a three-column event log with `as_lifecycle()`, validating the log against the
+specification, and then the same dwell estimation, thresholds and lead-time
+decomposition the chapters perform.
+
+```bash
+Rscript recorded/measuring-a-recorded-log.R
+```
+
+It closes by measuring the same population twice, once against its own
+specification and once against the book's, because the failure it guards
+against is silent rather than loud: a stage set that does not declare
+`departed` as an ending reads every departure as a wait that never finished,
+and the stage where the work completes becomes the worst-performing stage in
+the operation.
+
+These files are hand-written, which is the one exception to the rule below.
+They illustrate the package rather than a chapter, so there is no manuscript
+chunk to generate them from.
 
 ## The scripts are generated, not written
 
