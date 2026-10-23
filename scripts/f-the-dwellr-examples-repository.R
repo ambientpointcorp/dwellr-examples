@@ -34,21 +34,25 @@ c(censored_visits = sum(d$censored),
   specialty = sum(o$special_order))
 
 ## ---- own-extract -------------------------------------------------
-own <- list(
-  orders = data.frame(
-    order_no    = c("A1", "A2"),
-    entered_at  = as.POSIXct(c("2026-02-01 08:00", "2026-02-01 09:30"),
-                             tz = "UTC"),
-    stage       = c("received", "shipped"),
-    is_terminal = c(FALSE, TRUE),
-    branch      = c("30", "60"),
-    stringsAsFactors = FALSE),
+own_spec <- stage_spec(
+  stages      = c("received", "released", "shipped", "cancelled"),
+  transitions = c("received -> released", "released -> shipped",
+                  "received -> shipped", "received -> cancelled"),
+  terminal    = c("shipped", "cancelled"),
+  fulfilling  = "shipped")
+
+own <- as_lifecycle(
   events = data.frame(
     order_no    = c("A1", "A2", "A2"),
     event       = c("order_entered", "order_entered", "order_shipped"),
     stage       = c("received", "received", "shipped"),
     occurred_at = as.POSIXct(c("2026-02-01 08:00", "2026-02-01 09:30",
                                "2026-02-02 14:00"), tz = "UTC"),
+    stringsAsFactors = FALSE),
+  spec = own_spec,
+  orders = data.frame(
+    order_no = c("A1", "A2"),
+    branch   = c("30", "60"),
     stringsAsFactors = FALSE),
   as_of = as.POSIXct("2026-02-03 07:00", tz = "UTC"))
 

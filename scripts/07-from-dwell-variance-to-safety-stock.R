@@ -160,7 +160,8 @@ stock_orders <- sim$orders[!sim$orders$special_order, ]
 stock_sim <- structure(
   list(orders = stock_orders,
        events = sim$events[sim$events$order_no %in% stock_orders$order_no, ],
-       as_of  = sim$as_of),
+       as_of  = sim$as_of,
+       spec   = sim$spec),
   class = "lifecycle_sim")
 
 dec_stock <- lead_time_decompose(stock_sim, spec = spec)

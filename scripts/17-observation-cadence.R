@@ -123,7 +123,7 @@ shuffled <- events[sample(nrow(events)), ]
 rebuild <- function(ev) {
   d <- stage_dwell(structure(list(orders = orders, events = ev,
                                   lines = sim$lines, items = sim$items,
-                                  as_of = sim$as_of),
+                                  as_of = sim$as_of, spec = sim$spec),
                              class = "lifecycle_sim"))
   d[order(d$order_no, d$stage, d$entered_at), ]
 }
